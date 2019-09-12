@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     padding: 10,
+    flexWrap: 'wrap',
+  },
+  rowIndented: {
+    marginLeft: 30,
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -86,9 +90,10 @@ export const Status = ({
   onRowPress,
   onHeartPress,
   publishedAt,
+  indent,
 }) => (
   <TouchableOpacity onPress={onRowPress}>
-    <View style={styles.row}>
+    <View style={[styles.row, indent && styles.rowIndented]}>
       <View>
         <Image source={{ uri: avatarUri }} style={styles.avatar} />
       </View>

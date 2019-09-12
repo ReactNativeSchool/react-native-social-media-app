@@ -52,7 +52,7 @@ export default ({ navigation }) => (
     renderItem={({ item }) => (
       <Status
         {...item}
-        onRowPress={() => navigation.push('Thread')}
+        onRowPress={() => navigation.push('Thread', { status: item })}
         onHeartPress={() => alert('todo: like!')}
       />
     )}
