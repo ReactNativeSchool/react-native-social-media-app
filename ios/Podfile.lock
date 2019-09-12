@@ -79,6 +79,12 @@ PODS:
     - React-Core (= 0.60.5)
   - React-RCTWebSocket (0.60.5):
     - React-Core (= 0.60.5)
+  - RNGestureHandler (1.4.1):
+    - React
+  - RNReanimated (1.2.0):
+    - React
+  - RNScreens (2.0.0-alpha.3):
+    - React
   - yoga (0.60.5.React)
 
 DEPENDENCIES:
@@ -102,6 +108,9 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-RCTWebSocket (from `../node_modules/react-native/Libraries/WebSocket`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -149,6 +158,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   React-RCTWebSocket:
     :path: "../node_modules/react-native/Libraries/WebSocket"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -174,6 +189,9 @@ SPEC CHECKSUMS:
   React-RCTText: 36c0532feb5521cb295ba80e7e44b70cf1c36fc7
   React-RCTVibration: dabb8d59bb47e1d9124b3f77bfdc1b33d42b0a74
   React-RCTWebSocket: 2e7f6e98fd6d2bf447d145e499c3a235cc13e350
+  RNGestureHandler: 311e3b1cef021a7c9ef31e97e7dc31970cc6288d
+  RNReanimated: 9f7976535c5cde50189acd84751871f5414190b9
+  RNScreens: 354046589421edc3d83d5c6212475bf1fb9a731d
   yoga: 88c514f310aff89b94a14c5fbf44b95735af0cb7
 
 PODFILE CHECKSUM: eb63fdde1adbca4dd810e9378eb1389ed888ab94
