@@ -2,62 +2,39 @@ import React from 'react';
 import { FlatList, View } from 'react-native';
 
 import { Status, Separator } from '../components/Status';
+import { requestFeed } from '../graphql/queries';
+import { client } from '../graphql/client';
 
-const DATA = [
-  {
-    _id: '1',
-    avatarUri: 'https://picsum.photos/id/237/200',
-    name: 'Spencer Carli',
-    username: '@spencer_carli',
-    status: "This is an example status. Isn't it great?!",
-    // mediaUri: 'https://picsum.photos/400',
-    isLiked: false,
-    publishedAt: '2019-09-12T15:52:01.169Z',
-  },
-  {
-    _id: '2',
-    avatarUri: 'https://picsum.photos/id/237/200',
-    name: 'Spencer Carli',
-    username: '@spencer_carli',
-    status: "This is an example status. Isn't it great?!",
-    mediaUri: 'https://picsum.photos/400',
-    isLiked: true,
-    publishedAt: '2019-09-11T15:52:01.169Z',
-  },
-  {
-    _id: '3',
-    avatarUri: 'https://picsum.photos/id/237/200',
-    name: 'Spencer Carli',
-    username: '@spencer_carli',
-    status: "This is an example status. Isn't it great?!",
-    mediaUri: 'https://picsum.photos/400',
-    isLiked: false,
-    publishedAt: '2019-09-10T15:52:01.169Z',
-  },
-  {
-    _id: '4',
-    avatarUri: 'https://picsum.photos/id/237/200',
-    name: 'Spencer Carli',
-    username: '@spencer_carli',
-    status: "This is an example status. Isn't it great?!",
-    mediaUri: 'https://picsum.photos/400',
-    isLiked: false,
-    publishedAt: '2019-09-09T15:52:01.169Z',
-  },
-];
+class Feed extends React.Component {
+  state = {
+    feed: [],
+  };
 
-export default ({ navigation }) => (
-  <FlatList
-    data={DATA}
-    renderItem={({ item }) => (
-      <Status
-        {...item}
-        onRowPress={() => navigation.push('Thread', { status: item })}
-        onHeartPress={() => alert('todo: like!')}
+  componentDidMount() {
+    client.query({ query: requestFeed }).then(res => {
+      this.setState({ feed: res.data.feed });
+    });
+  }
+
+  render() {
+    return (
+      <FlatList
+        data={this.state.feed}
+        renderItem={({ item }) => (
+          <Status
+            {...item}
+            onRowPress={() =>
+              this.props.navigation.push('Thread', { status: item })
+            }
+            onHeartPress={() => alert('todo: like!')}
+          />
+        )}
+        ItemSeparatorComponent={() => <Separator />}
+        keyExtractor={item => item._id}
+        ListFooterComponent={<View style={{ flex: 1, marginBottom: 60 }} />}
       />
-    )}
-    ItemSeparatorComponent={() => <Separator />}
-    keyExtractor={item => item._id}
-    ListFooterComponent={<View style={{ flex: 1, marginBottom: 60 }} />}
-  />
-);
+    );
+  }
+}
+
+export default Feed;

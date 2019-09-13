@@ -14,12 +14,18 @@ const typeDefs = gql`
 
   type Query {
     feed: [Status]
+    responses(_id: String): [Status]
   }
 `;
 
 const resolvers = {
   Query: {
-    feed: () => require("./data").FEED
+    feed: () => require("./data").FEED,
+    responses: (parent, args) => {
+      return require("./data").RESPONSES.filter(
+        item => item.parentId === args._id
+      );
+    }
   }
 };
 
