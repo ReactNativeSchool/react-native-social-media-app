@@ -2,6 +2,7 @@ import React from 'react';
 import { FlatList, View } from 'react-native';
 
 import { Status, Separator } from '../components/Status';
+import { Button } from '../components/Button';
 
 const DATA = [
   {
@@ -44,14 +45,29 @@ export default ({ navigation }) => {
       renderItem={({ item }) => (
         <Status
           {...item}
-          onRowPress={() => navigation.push('Thread')}
           onHeartPress={() => alert('todo: like!')}
           indent={!item.originalStatus}
         />
       )}
       ItemSeparatorComponent={() => <Separator />}
       keyExtractor={item => item._id}
-      ListFooterComponent={<View style={{ flex: 1, marginBottom: 60 }} />}
+      ListFooterComponent={
+        <View
+          style={{
+            flex: 1,
+            marginBottom: 60,
+            marginHorizontal: 30,
+            marginTop: 10,
+          }}
+        >
+          <Button
+            text="New Reply"
+            onPress={() =>
+              navigation.navigate('NewStatus', { parent: originalStatus })
+            }
+          />
+        </View>
+      }
     />
   );
 };
