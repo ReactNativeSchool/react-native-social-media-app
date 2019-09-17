@@ -1,11 +1,18 @@
 const { ApolloServer, gql } = require("apollo-server");
+const db = require("./db");
 
 const typeDefs = gql`
-  type Status {
+  type User {
     _id: String
     avatarUri: String
     name: String
     username: String
+  }
+
+  type Status {
+    _id: String
+    userId: String
+    user: User
     status: String
     mediaUri: String
     isLiked: Boolean
@@ -19,12 +26,25 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
+  Status: {
+    user: status => {
+      return db
+        .get("users")
+        .find({ _id: status.userId })
+        .value();
+    }
+  },
   Query: {
-    feed: () => require("./data").FEED,
+    feed: () =>
+      db
+        .get("posts")
+        .filter({ parentPostId: null })
+        .value(),
     responses: (parent, args) => {
-      return require("./data").RESPONSES.filter(
-        item => item.parentId === args._id
-      );
+      return db
+        .get("posts")
+        .filter({ parentPostId: args._id })
+        .value();
     }
   }
 };
