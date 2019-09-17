@@ -28,14 +28,13 @@ const typeDefs = gql`
   }
 
   input StatusInput {
-    userId: String!
     status: String!
     # mediaUri: String!
   }
 
   type Mutation {
     createStatus(status: StatusInput): Status
-    likeStatus(userId: String!, statusId: String!): Status
+    likeStatus(statusId: String!): Status
   }
 `;
 
@@ -47,16 +46,17 @@ const resolvers = {
         .find({ _id: status.userId })
         .value();
     },
-    isLiked: status => {
-      return db.get(`likes.${status.userId}`, {}).value()[status._id] || false;
+    isLiked: (status, args, context) => {
+      return db.get(`likes.${context.userId}`, {}).value()[status._id] || false;
     }
   },
   Query: {
-    feed: () =>
-      db
+    feed: () => {
+      return db
         .get("posts")
         .filter({ parentPostId: null })
-        .value(),
+        .value();
+    },
     responses: (parent, args) => {
       return db
         .get("posts")
@@ -65,13 +65,13 @@ const resolvers = {
     }
   },
   Mutation: {
-    createStatus: (parent, { status }) => {
+    createStatus: (parent, { status }, context) => {
       const _id = shortid.generate();
       db.get("posts")
         .push({
           _id,
           parentPostId: null,
-          userId: status.userId,
+          userId: context.userId,
           status: status.status,
           // mediaUri: String
           publishedAt: new Date().toISOString()
@@ -84,8 +84,8 @@ const resolvers = {
         .value();
     },
 
-    likeStatus: (parent, { userId, statusId }) => {
-      const key = `likes.${userId}`;
+    likeStatus: (parent, { statusId }, context) => {
+      const key = `likes.${context.userId}`;
       const currentLikes = db.get(key, {}).value();
       const currentLikeStatus = currentLikes[statusId] || false;
       db.set(key, {
@@ -101,7 +101,15 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => {
+    return {
+      userId: req.headers.userid
+    };
+  }
+});
 
 // The `listen` method launches a web server.
 server.listen().then(({ url }) => {

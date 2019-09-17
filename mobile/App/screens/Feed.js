@@ -23,7 +23,7 @@ const Feed = ({ navigation }) => {
           onRowPress={() => navigation.push('Thread', { status: item })}
           onHeartPress={() =>
             likeStatusFn({
-              variables: { statusId: item._id, userId: item.userId },
+              variables: { statusId: item._id },
             })
           }
         />

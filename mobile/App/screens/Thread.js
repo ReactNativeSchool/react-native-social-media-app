@@ -26,7 +26,7 @@ const Thread = ({ navigation }) => {
           {...item}
           onHeartPress={() =>
             likeStatusFn({
-              variables: { statusId: item._id, userId: item.userId },
+              variables: { statusId: item._id },
             })
           }
           indent={!item.originalStatus}
