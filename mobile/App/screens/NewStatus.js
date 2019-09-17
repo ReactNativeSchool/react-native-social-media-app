@@ -5,11 +5,25 @@ import { useMutation } from '@apollo/react-hooks';
 import { NewStatusInput } from '../components/NewStatusInput';
 import { Header } from '../components/Header';
 import { createStatus } from '../graphql/mutations';
+import { requestFeed, requestResponses } from '../graphql/queries';
 
 export default ({ navigation }) => {
   const parentStatus = navigation.getParam('parent', {});
   const [status, setStatus] = useState();
-  const [createStatusFn] = useMutation(createStatus);
+
+  const refetchQueries = [];
+  if (parentStatus._id) {
+    refetchQueries.push({
+      query: requestResponses,
+      variables: { _id: parentStatus._id },
+    });
+  } else {
+    refetchQueries.push({ query: requestFeed });
+  }
+
+  const [createStatusFn] = useMutation(createStatus, {
+    refetchQueries,
+  });
 
   return (
     <React.Fragment>
