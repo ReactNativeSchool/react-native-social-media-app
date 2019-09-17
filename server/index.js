@@ -1,4 +1,6 @@
 const { ApolloServer, gql } = require("apollo-server");
+const shortid = require("shortid");
+
 const db = require("./db");
 
 const typeDefs = gql`
@@ -15,13 +17,24 @@ const typeDefs = gql`
     user: User
     status: String
     mediaUri: String
-    isLiked: Boolean
+    # isLiked: Boolean
     publishedAt: String
+    parentPostId: String
   }
 
   type Query {
     feed: [Status]
     responses(_id: String): [Status]
+  }
+
+  input StatusInput {
+    userId: String!
+    status: String!
+    # mediaUri: String!
+  }
+
+  type Mutation {
+    createStatus(status: StatusInput): Status
   }
 `;
 
@@ -44,6 +57,26 @@ const resolvers = {
       return db
         .get("posts")
         .filter({ parentPostId: args._id })
+        .value();
+    }
+  },
+  Mutation: {
+    createStatus: (parent, args) => {
+      const _id = shortid.generate();
+      db.get("posts")
+        .push({
+          _id,
+          parentPostId: null,
+          userId: args.status.userId,
+          status: args.status.status,
+          // mediaUri: String
+          publishedAt: new Date().toISOString()
+        })
+        .write();
+
+      return db
+        .get("posts")
+        .find({ _id })
         .value();
     }
   }
