@@ -29,6 +29,7 @@ const typeDefs = gql`
 
   input StatusInput {
     status: String!
+    parentPostId: String
     # mediaUri: String!
   }
 
@@ -54,23 +55,26 @@ const resolvers = {
     feed: () => {
       return db
         .get("posts")
-        .filter({ parentPostId: null })
+        .filter(o => o.parentPostId === null || o.parentPostId === undefined)
+        .orderBy("publishedAt", "desc")
         .value();
     },
     responses: (parent, args) => {
       return db
         .get("posts")
         .filter({ parentPostId: args._id })
+        .orderBy("publishedAt", "desc")
         .value();
     }
   },
   Mutation: {
     createStatus: (parent, { status }, context) => {
       const _id = shortid.generate();
+
       db.get("posts")
         .push({
           _id,
-          parentPostId: null,
+          parentPostId: status.parentPostId,
           userId: context.userId,
           status: status.status,
           // mediaUri: String

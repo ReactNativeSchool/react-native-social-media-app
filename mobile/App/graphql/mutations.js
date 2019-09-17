@@ -8,3 +8,11 @@ export const likeStatus = gql`
     }
   }
 `;
+
+export const createStatus = gql`
+  mutation createStatus($status: String!, $parentPostId: String) {
+    createStatus(status: { status: $status, parentPostId: $parentPostId }) {
+      _id
+    }
+  }
+`;
