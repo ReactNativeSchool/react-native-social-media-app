@@ -87,9 +87,10 @@ const resolvers = {
     likeStatus: (parent, { userId, statusId }) => {
       const key = `likes.${userId}`;
       const currentLikes = db.get(key, {}).value();
+      const currentLikeStatus = currentLikes[statusId] || false;
       db.set(key, {
         ...currentLikes,
-        [statusId]: true
+        [statusId]: !currentLikeStatus
       }).write();
 
       return db

@@ -1,40 +1,38 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { Status, Separator } from '../components/Status';
 import { requestFeed } from '../graphql/queries';
-import { client } from '../graphql/client';
+import { likeStatus } from '../graphql/mutations';
 
-class Feed extends React.Component {
-  state = {
-    feed: [],
-  };
+const Feed = ({ navigation }) => {
+  const { data, loading } = useQuery(requestFeed);
+  const [likeStatusFn] = useMutation(likeStatus);
 
-  componentDidMount() {
-    client.query({ query: requestFeed }).then(res => {
-      this.setState({ feed: res.data.feed });
-    });
+  if (loading) {
+    return null;
   }
 
-  render() {
-    return (
-      <FlatList
-        data={this.state.feed}
-        renderItem={({ item }) => (
-          <Status
-            {...item}
-            onRowPress={() =>
-              this.props.navigation.push('Thread', { status: item })
-            }
-            onHeartPress={() => alert('todo: like!')}
-          />
-        )}
-        ItemSeparatorComponent={() => <Separator />}
-        keyExtractor={item => item._id}
-        ListFooterComponent={<View style={{ flex: 1, marginBottom: 60 }} />}
-      />
-    );
-  }
-}
+  return (
+    <FlatList
+      data={data.feed}
+      renderItem={({ item }) => (
+        <Status
+          {...item}
+          onRowPress={() => navigation.push('Thread', { status: item })}
+          onHeartPress={() =>
+            likeStatusFn({
+              variables: { statusId: item._id, userId: item.userId },
+            })
+          }
+        />
+      )}
+      ItemSeparatorComponent={() => <Separator />}
+      keyExtractor={item => item._id}
+      ListFooterComponent={<View style={{ flex: 1, marginBottom: 60 }} />}
+    />
+  );
+};
 
 export default Feed;

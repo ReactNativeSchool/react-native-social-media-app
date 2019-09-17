@@ -81,9 +81,7 @@ const styles = StyleSheet.create({
 });
 
 export const Status = ({
-  avatarUri,
-  name,
-  username,
+  user,
   status,
   mediaUri,
   isLiked,
@@ -95,12 +93,12 @@ export const Status = ({
   <TouchableOpacity onPress={onRowPress}>
     <View style={[styles.row, indent && styles.rowIndented]}>
       <View>
-        <Image source={{ uri: avatarUri }} style={styles.avatar} />
+        <Image source={{ uri: user.avatarUri }} style={styles.avatar} />
       </View>
       <View style={styles.right}>
         <View style={styles.header}>
-          <Text style={styles.textName}>{name}</Text>
-          <Text style={styles.textUsername}>{username}</Text>
+          <Text style={styles.textName}>{user.name}</Text>
+          <Text style={styles.textUsername}>{user.username}</Text>
         </View>
         <Text style={styles.textStatus}>{status}</Text>
         {mediaUri && (

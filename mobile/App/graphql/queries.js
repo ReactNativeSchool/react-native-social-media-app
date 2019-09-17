@@ -4,9 +4,12 @@ export const requestFeed = gql`
   {
     feed {
       _id
-      avatarUri
-      name
-      username
+      userId
+      user {
+        avatarUri
+        name
+        username
+      }
       status
       mediaUri
       isLiked
@@ -19,9 +22,12 @@ export const requestResponses = gql`
   query Responses($_id: String!) {
     responses(_id: $_id) {
       _id
-      avatarUri
-      name
-      username
+      userId
+      user {
+        avatarUri
+        name
+        username
+      }
       status
       mediaUri
       isLiked
