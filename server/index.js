@@ -17,7 +17,7 @@ const typeDefs = gql`
     user: User
     status: String
     mediaUri: String
-    # isLiked: Boolean
+    isLiked: Boolean
     publishedAt: String
     parentPostId: String
   }
@@ -35,6 +35,7 @@ const typeDefs = gql`
 
   type Mutation {
     createStatus(status: StatusInput): Status
+    likeStatus(userId: String!, statusId: String!): Status
   }
 `;
 
@@ -45,6 +46,9 @@ const resolvers = {
         .get("users")
         .find({ _id: status.userId })
         .value();
+    },
+    isLiked: status => {
+      return db.get(`likes.${status.userId}`, {}).value()[status._id] || false;
     }
   },
   Query: {
@@ -61,14 +65,14 @@ const resolvers = {
     }
   },
   Mutation: {
-    createStatus: (parent, args) => {
+    createStatus: (parent, { status }) => {
       const _id = shortid.generate();
       db.get("posts")
         .push({
           _id,
           parentPostId: null,
-          userId: args.status.userId,
-          status: args.status.status,
+          userId: status.userId,
+          status: status.status,
           // mediaUri: String
           publishedAt: new Date().toISOString()
         })
@@ -77,6 +81,20 @@ const resolvers = {
       return db
         .get("posts")
         .find({ _id })
+        .value();
+    },
+
+    likeStatus: (parent, { userId, statusId }) => {
+      const key = `likes.${userId}`;
+      const currentLikes = db.get(key, {}).value();
+      db.set(key, {
+        ...currentLikes,
+        [statusId]: true
+      }).write();
+
+      return db
+        .get("posts")
+        .find({ _id: statusId })
         .value();
     }
   }

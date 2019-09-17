@@ -35,7 +35,8 @@ db.defaults({
       name: "Spencer Carli",
       username: "@spencer_carli"
     }
-  ]
+  ],
+  likes: {}
 }).write();
 
 module.exports = db;
