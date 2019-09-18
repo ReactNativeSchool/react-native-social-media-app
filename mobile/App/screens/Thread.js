@@ -20,7 +20,7 @@ const Thread = ({ navigation }) => {
 
   return (
     <FlatList
-      data={[{ ...originalStatus, originalStatus: true }, ...data.responses]}
+      data={data.responses}
       renderItem={({ item }) => (
         <Status
           {...item}
@@ -29,7 +29,7 @@ const Thread = ({ navigation }) => {
               variables: { statusId: item._id },
             })
           }
-          indent={!item.originalStatus}
+          indent={item._id !== originalStatus._id}
         />
       )}
       ItemSeparatorComponent={() => <Separator />}

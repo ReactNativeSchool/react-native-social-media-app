@@ -51,6 +51,7 @@ const resolvers = {
       return db.get(`likes.${context.userId}`, {}).value()[status._id] || false;
     }
   },
+
   Query: {
     feed: () => {
       return db
@@ -60,13 +61,20 @@ const resolvers = {
         .value();
     },
     responses: (parent, args) => {
-      return db
+      const originalStatus = db
+        .get("posts")
+        .find({ _id: args._id })
+        .value();
+      const responses = db
         .get("posts")
         .filter({ parentPostId: args._id })
         .orderBy("publishedAt", "desc")
         .value();
+
+      return [originalStatus, ...responses];
     }
   },
+
   Mutation: {
     createStatus: (parent, { status }, context) => {
       const _id = shortid.generate();
