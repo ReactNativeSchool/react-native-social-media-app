@@ -46,11 +46,8 @@ const ModalNavigator = createStackNavigator(
 
 const App = createAppContainer(ModalNavigator);
 
-export default () => {
-  client.writeData({ data: { userId: 'user-2' } });
-  return (
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  );
-};
+export default () => (
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>
+);

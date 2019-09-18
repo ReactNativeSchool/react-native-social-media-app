@@ -5,7 +5,7 @@ export const client = new ApolloClient({
   request: async operation => {
     operation.setContext({
       headers: {
-        userId: 'user-2',
+        Authorization: 'Bearer ASF123',
       },
     });
   },

@@ -28,6 +28,7 @@ const resolvers = {
         .get("feed")
         .find({ _id: args._id })
         .value();
+
       const responses = db
         .get("feed")
         .filter({ parentPostId: args._id })

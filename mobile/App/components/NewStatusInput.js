@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const NewStatusInput = ({ avatarUri, ...props }) => (
+export const NewStatusInput = ({ ...props }) => (
   <View style={styles.container}>
     <TextInput style={styles.input} multiline numberOfLines={6} {...props} />
   </View>
