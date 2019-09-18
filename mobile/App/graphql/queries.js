@@ -11,7 +11,6 @@ export const requestFeed = gql`
         username
       }
       status
-      mediaUri
       isLiked
       publishedAt
     }
@@ -29,7 +28,6 @@ export const requestResponses = gql`
         username
       }
       status
-      mediaUri
       isLiked
       publishedAt
     }

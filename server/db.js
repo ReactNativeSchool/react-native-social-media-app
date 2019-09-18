@@ -5,7 +5,7 @@ const adapter = new FileSync("db.json");
 const db = low(adapter);
 
 db.defaults({
-  posts: [
+  feed: [
     {
       _id: "1",
       userId: "user-1",
@@ -27,7 +27,7 @@ db.defaults({
       _id: "user-1",
       avatarUri: "https://picsum.photos/id/237/200",
       name: "Jane Doe",
-      username: "@jane_carli"
+      username: "@jane_doe"
     },
     {
       _id: "user-2",

@@ -50,16 +50,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#4f5153',
   },
-  media: {
-    flex: 1,
-    height: 200,
-    width: Screen.width * 0.75,
-    backgroundColor: '#6e7f8d',
-    marginTop: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-  },
   actions: {
     marginTop: 10,
     flexDirection: 'row',
@@ -83,7 +73,6 @@ const styles = StyleSheet.create({
 export const Status = ({
   user,
   status,
-  mediaUri,
   isLiked,
   onRowPress,
   onHeartPress,
@@ -101,13 +90,7 @@ export const Status = ({
           <Text style={styles.textUsername}>{user.username}</Text>
         </View>
         <Text style={styles.textStatus}>{status}</Text>
-        {mediaUri && (
-          <Image
-            style={styles.media}
-            resizeMode="cover"
-            source={{ uri: mediaUri }}
-          />
-        )}
+
         <View style={styles.actions}>
           <TouchableOpacity onPress={onHeartPress}>
             {isLiked ? (
