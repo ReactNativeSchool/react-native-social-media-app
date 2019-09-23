@@ -1,14 +1,12 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { ApolloProvider } from '@apollo/react-hooks';
 
 import Feed from './screens/Feed';
 import Thread from './screens/Thread';
 import NewStatus from './screens/NewStatus';
 
 import { Button } from './components/Button';
-import { client } from './graphql/client';
 
 const AppNavigator = createStackNavigator({
   Feed: {
@@ -46,8 +44,4 @@ const ModalNavigator = createStackNavigator(
 
 const App = createAppContainer(ModalNavigator);
 
-export default () => (
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
-);
+export default () => <App />;

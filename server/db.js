@@ -11,7 +11,7 @@ db.defaults({
       userId: "user-1",
       status: "This is an example status. Isn't it great?!",
       publishedAt: "2019-09-12T15:52:01.169Z",
-      parentPostId: null
+      parentStatusId: null
     },
     {
       _id: "t-1",
@@ -19,7 +19,7 @@ db.defaults({
       status:
         "This is an example response, which is really just a status with a parent. Isn't it great?!",
       publishedAt: "2019-09-12T15:52:01.169Z",
-      parentPostId: "1"
+      parentStatusId: "1"
     }
   ],
   users: [
