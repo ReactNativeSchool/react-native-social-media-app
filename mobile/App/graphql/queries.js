@@ -7,3 +7,20 @@ export const exampleQuery = gql`
     }
   }
 `;
+
+export const requestFeed = gql`
+  {
+    feed {
+      _id
+      status
+      userId
+      publishedAt
+      user {
+        _id
+        username
+        avatarUri
+        name
+      }
+    }
+  }
+`;
