@@ -25,6 +25,7 @@ const typeDefs = gql`
   type Query {
     example: Example
     feed: [Status]
+    responses(_id: String): [Status]
   }
 `;
 
