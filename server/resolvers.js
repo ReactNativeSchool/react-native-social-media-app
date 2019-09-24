@@ -8,6 +8,11 @@ const resolvers = {
         .get("users")
         .find({ _id: status.userId })
         .value();
+    },
+
+    isLiked: (status, args, context) => {
+      const currentLikes = db.get(`likes.${context.userId}`, {}).value();
+      return currentLikes[status._id] || false;
     }
   },
 
@@ -63,6 +68,30 @@ const resolvers = {
       return db
         .get("feed")
         .find({ _id })
+        .value();
+    },
+
+    likeStatus: (parent, args, context) => {
+      /*
+        likes: {
+          USER_ID: {
+            STATUS_ID: true, false
+          }
+        }
+      */
+
+      const key = `likes.${context.userId}`;
+      const currentLikes = db.get(key, {}).value();
+      const currentLikeStatus = currentLikes[args.statusId] || false;
+
+      db.set(key, {
+        ...currentLikes,
+        [args.statusId]: !currentLikeStatus
+      }).write();
+
+      return db
+        .get("feed")
+        .find({ _id: args.statusId })
         .value();
     }
   }
