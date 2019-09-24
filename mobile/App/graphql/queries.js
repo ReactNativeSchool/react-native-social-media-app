@@ -24,3 +24,20 @@ export const requestFeed = gql`
     }
   }
 `;
+
+export const requestResponses = gql`
+  query Responses($_id: String!) {
+    responses(_id: $_id) {
+      _id
+      status
+      userId
+      publishedAt
+      user {
+        _id
+        username
+        avatarUri
+        name
+      }
+    }
+  }
+`;
