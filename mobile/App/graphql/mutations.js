@@ -9,3 +9,12 @@ export const createStatus = gql`
     }
   }
 `;
+
+export const likeStatus = gql`
+  mutation LikeStatus($statusId: String!) {
+    likeStatus(statusId: $statusId) {
+      _id
+      isLiked
+    }
+  }
+`;

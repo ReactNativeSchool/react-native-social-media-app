@@ -1,13 +1,15 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { requestFeed } from '../graphql/queries';
+import { likeStatus } from '../graphql/mutations';
 
 import { Status, Separator } from '../components/Status';
 
 const Feed = ({ navigation }) => {
   const { loading, data } = useQuery(requestFeed);
+  const [likeStatusFn] = useMutation(likeStatus);
 
   if (loading) {
     return null;
@@ -20,7 +22,9 @@ const Feed = ({ navigation }) => {
         <Status
           {...item}
           onRowPress={() => navigation.push('Thread', { status: item })}
-          onHeartPress={() => alert('todo!')}
+          onHeartPress={() =>
+            likeStatusFn({ variables: { statusId: item._id } })
+          }
         />
       )}
       ItemSeparatorComponent={() => <Separator />}

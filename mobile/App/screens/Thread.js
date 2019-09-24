@@ -1,16 +1,18 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { Status, Separator } from '../components/Status';
 import { Button } from '../components/Button';
 import { requestResponses } from '../graphql/queries';
+import { likeStatus } from '../graphql/mutations';
 
 const Thread = ({ navigation }) => {
   const originalStatus = navigation.getParam('status', {});
   const { loading, data } = useQuery(requestResponses, {
     variables: { _id: originalStatus._id },
   });
+  const [likeStatusFn] = useMutation(likeStatus);
 
   if (loading) {
     return null;
@@ -22,7 +24,9 @@ const Thread = ({ navigation }) => {
       renderItem={({ item }) => (
         <Status
           {...item}
-          onHeartPress={() => alert('todo!')}
+          onHeartPress={() =>
+            likeStatusFn({ variables: { statusId: item._id } })
+          }
           indent={item._id !== originalStatus._id}
         />
       )}

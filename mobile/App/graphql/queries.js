@@ -15,6 +15,7 @@ export const requestFeed = gql`
       status
       userId
       publishedAt
+      isLiked
       user {
         _id
         username
@@ -32,6 +33,7 @@ export const requestResponses = gql`
       status
       userId
       publishedAt
+      isLiked
       user {
         _id
         username
