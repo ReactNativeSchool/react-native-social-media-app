@@ -1,3 +1,4 @@
+const shortid = require("shortid");
 const db = require("./db");
 
 const resolvers = {
@@ -36,6 +37,33 @@ const resolvers = {
         .value();
 
       return [originalStatus, ...responses];
+    }
+  },
+
+  Mutation: {
+    createStatus: (parent, args, context) => {
+      if (!context.userId) {
+        throw new Error("Must be a user.");
+      }
+
+      const _id = shortid.generate();
+      const newStatus = {
+        _id,
+        userId: context.userId,
+        status: args.status.text,
+        publishedAt: new Date().toISOString(),
+        parentStatusId: args.status.parentStatusId
+      };
+
+      // console.log(newStatus);
+      db.get("feed")
+        .push(newStatus)
+        .write();
+
+      return db
+        .get("feed")
+        .find({ _id })
+        .value();
     }
   }
 };

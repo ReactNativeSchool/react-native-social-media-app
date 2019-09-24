@@ -27,6 +27,15 @@ const typeDefs = gql`
     feed: [Status]
     responses(_id: String): [Status]
   }
+
+  input StatusInput {
+    text: String!
+    parentStatusId: String
+  }
+
+  type Mutation {
+    createStatus(status: StatusInput): Status
+  }
 `;
 
 module.exports = typeDefs;
