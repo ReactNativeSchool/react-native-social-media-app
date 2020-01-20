@@ -182,6 +182,8 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
+  - react-native-safe-area-context (0.6.2):
+    - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -217,6 +219,8 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
+  - RNCMaskedView (0.1.6):
+    - React
   - RNGestureHandler (1.5.3):
     - React
   - RNReanimated (1.7.0):
@@ -242,6 +246,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -253,6 +258,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -291,6 +297,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -311,6 +319,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-community/masked-view"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -336,6 +346,7 @@ SPEC CHECKSUMS:
   React-jsi: f9126dd5818fbd8fbf869be9bbc1c0543973e1a1
   React-jsiexecutor: 752f034d0f007d1141a1c52ba9ef3fd9668fbfa7
   React-jsinspector: 044105eea064aec81adc5e4d777a8f6589e7d094
+  react-native-safe-area-context: 686e5d98bb021d8ca415ec5cf2a30dfc0d7d0d93
   React-RCTActionSheet: 49433f6e3659ba5d3ee650e44b9c18743ef9a7fc
   React-RCTAnimation: 12f86a4e3542032329366b03bca2cc254a7c64a9
   React-RCTBlob: ba90a4144ad478a022b79a4e8a1f150548d39425
@@ -346,6 +357,7 @@ SPEC CHECKSUMS:
   React-RCTText: 3f24042210886ee8c02613758013010be04b291e
   React-RCTVibration: d55e1365be416980217914fe009e9d55dec02e03
   ReactCommon: eb96b70a2a5bed775e919151fd77699fed52944c
+  RNCMaskedView: 13dedff7c0722ffbb7349c489705be7eba428711
   RNGestureHandler: 123c4bb46136077e390cc308a432029a1c1f47e5
   RNReanimated: e0bb8012c83f3d28794c62bf3ad6c4b2d182a915
   RNScreens: cbad3ccd2798bd19cc9ca5070e95e31c950b50ac
