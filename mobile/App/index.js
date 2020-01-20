@@ -13,7 +13,7 @@ const AppNavigator = createStackNavigator({
     screen: Feed,
     navigationOptions: ({ navigation }) => ({
       headerTitle: 'Home',
-      headerRight: (
+      headerRight: () => (
         <Button
           text="New Status"
           onPress={() => navigation.navigate('NewStatus')}
