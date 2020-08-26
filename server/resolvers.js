@@ -45,7 +45,7 @@ const resolvers = {
       const newPost = {
         _id,
         userId: context.userId,
-        post: args.post.text,
+        text: args.post.text,
         publishedAt: new Date().toISOString(),
         parentPostId: args.post.parentPostId,
       };
