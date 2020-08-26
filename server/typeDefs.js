@@ -1,11 +1,6 @@
 const { gql } = require("apollo-server");
 
 const typeDefs = gql`
-  type Example {
-    _id: String
-    text: String
-  }
-
   type User {
     _id: String
     avatarUri: String
@@ -13,30 +8,29 @@ const typeDefs = gql`
     username: String
   }
 
-  type Status {
+  type Post {
     _id: String
     userId: String
-    status: String
+    text: String
     publishedAt: String
-    parentStatusId: String
+    parentPostId: String
     user: User
     isLiked: Boolean
   }
 
   type Query {
-    example: Example
-    feed: [Status]
-    responses(_id: String): [Status]
+    feed: [Post]
+    responses(_id: String): [Post]
   }
 
-  input StatusInput {
+  input PostInput {
     text: String!
-    parentStatusId: String
+    parentPostId: String
   }
 
   type Mutation {
-    createStatus(status: StatusInput): Status
-    likeStatus(statusId: String!): Status
+    createPost(post: PostInput): Post
+    likePost(postId: String!): Post
   }
 `;
 
