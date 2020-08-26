@@ -66,7 +66,7 @@ db.defaults({
       username: "@john_doe",
     },
   ],
-  likes: {},
+  likes: [],
 }).write();
 
 module.exports = db;

@@ -8,8 +8,16 @@ const resolvers = {
     },
 
     isLiked: (post, args, context) => {
-      const currentLikes = db.get(`likes.${context.userId}`, {}).value();
-      return currentLikes[post._id] || false;
+      const doc = db
+        .get("likes")
+        .find({ _id: `${context.userId}_${post._id}` })
+        .value();
+
+      if (!doc) {
+        return false;
+      }
+
+      return doc.liked;
     },
   },
 
@@ -56,14 +64,31 @@ const resolvers = {
     },
 
     likePost: (parent, args, context) => {
-      const key = `likes.${context.userId}`;
-      const currentLikes = db.get(key, {}).value();
-      const currentLikePost = currentLikes[args.postId] || false;
+      const userId = context.userId;
+      const postId = args.postId;
 
-      db.set(key, {
-        ...currentLikes,
-        [args.postId]: !currentLikePost,
-      }).write();
+      if (!userId) {
+        throw new Error("Must be a user.");
+      }
+
+      const _id = `${userId}_${postId}`;
+      const docIndex = db.get("likes").findIndex({ _id }).value();
+
+      const likes = db.get("likes").value();
+      if (docIndex >= 0) {
+        const doc = likes[docIndex];
+        likes[docIndex] = {
+          ...doc,
+          liked: !doc.liked,
+        };
+      } else {
+        likes.push({
+          _id,
+          liked: true,
+        });
+      }
+
+      db.set("likes", likes).write();
 
       return db.get("feed").find({ _id: args.postId }).value();
     },
