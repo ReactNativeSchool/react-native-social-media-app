@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "yarn nodemon index.js"
+    "dev": "yarn nodemon index.js",
+    "lint": "yarn eslint ."
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,8 @@
     "shortid": "^2.2.15"
   },
   "devDependencies": {
+    "eslint": "^7.7.0",
+    "eslint-config-handlebarlabs": "^0.0.6",
     "nodemon": "^2.0.3"
   }
 }

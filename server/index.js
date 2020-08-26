@@ -3,7 +3,7 @@ const { ApolloServer } = require("apollo-server");
 const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
 
-const validateTokenAndGetUserId = token => {
+const validateTokenAndGetUserId = () => {
   // TODO: do work to authorize user
   return "user-2";
 };
@@ -16,12 +16,12 @@ const server = new ApolloServer({
 
     if (req.headers.authorization) {
       // Bearer SOME_TOKEN
-      const [bearer, token] = req.headers.authorization.split(" ");
+      const [, token] = req.headers.authorization.split(" ");
       context.userId = validateTokenAndGetUserId(token);
     }
 
     return context;
-  }
+  },
 });
 
 server.listen().then(({ url }) => {
