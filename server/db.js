@@ -1,5 +1,6 @@
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
+const bcrypt = require("bcryptjs");
 
 const adapter = new FileSync("db.json");
 const db = low(adapter);
@@ -57,13 +58,15 @@ db.defaults({
       _id: "user-1",
       avatarUri: "https://picsum.photos/id/237/200",
       name: "Jane Doe",
-      username: "@jane_doe",
+      username: "jane_doe",
+      password: bcrypt.hashSync("password", 10),
     },
     {
       _id: "user-2",
       avatarUri: "https://picsum.photos/id/238/200",
       name: "John Doe",
-      username: "@john_doe",
+      username: "john_doe",
+      password: bcrypt.hashSync("password", 10),
     },
   ],
   likes: [],

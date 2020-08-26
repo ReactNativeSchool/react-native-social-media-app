@@ -1,5 +1,11 @@
 const shortid = require("shortid");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 const db = require("./db");
+const config = require("./config");
+
+const randomNum = (max = 100) => Math.floor(Math.random() * Math.floor(max));
 
 const resolvers = {
   Post: {
@@ -91,6 +97,60 @@ const resolvers = {
       db.set("likes", likes).write();
 
       return db.get("feed").find({ _id: args.postId }).value();
+    },
+
+    login: (parent, args) => {
+      const { username, password } = args;
+
+      const user = db.get("users").find({ username }).value();
+
+      if (!user) {
+        throw new Error("No user found.");
+      }
+
+      const passwordMatch = bcrypt.compareSync(password, user.password);
+
+      if (!passwordMatch) {
+        throw new Error("Invalid password.");
+      }
+
+      const token = jwt.sign(
+        {
+          _id: user._id,
+          username: user.username,
+        },
+        config.JWT_SECRET,
+        {
+          expiresIn: "30d", // token will expire in 30days
+        }
+      );
+
+      return {
+        user,
+        token,
+      };
+    },
+
+    register: (parent, args) => {
+      const { username, password, name } = args.user;
+
+      // Check if user already exists with that email address
+      const user = db.get("users").find({ username }).value();
+      if (user) {
+        throw new Error("User already exists.");
+      }
+
+      const newUser = {
+        _id: shortid.generate(),
+        username,
+        password: bcrypt.hashSync(password, 10),
+        avatarUri: `https://picsum.photos/id/${randomNum()}/200`,
+        name,
+      };
+
+      db.get("users").push(newUser).write();
+
+      return newUser;
     },
   },
 };

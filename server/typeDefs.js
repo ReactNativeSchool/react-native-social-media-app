@@ -18,6 +18,11 @@ const typeDefs = gql`
     isLiked: Boolean
   }
 
+  type AuthPayload {
+    user: User
+    token: String
+  }
+
   type Query {
     feed: [Post]
     responses(_id: String): [Post]
@@ -28,9 +33,17 @@ const typeDefs = gql`
     parentPostId: String
   }
 
+  input UserInput {
+    username: String!
+    name: String!
+    password: String!
+  }
+
   type Mutation {
     createPost(post: PostInput): Post
     likePost(postId: String!): Post
+    login(username: String!, password: String!): AuthPayload
+    register(user: UserInput): User
   }
 `;
 
