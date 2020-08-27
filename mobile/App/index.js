@@ -6,10 +6,24 @@ import { Feed } from "./screens/Feed";
 import { Thread } from "./screens/Thread";
 import { NewPost } from "./screens/NewPost";
 
+import { Button } from "./components/Button";
+
 const AppStack = createStackNavigator();
 const AppStackScreen = () => (
   <AppStack.Navigator>
-    <AppStack.Screen name="Feed" component={Feed} />
+    <AppStack.Screen
+      name="Feed"
+      component={Feed}
+      options={({ navigation }) => ({
+        headerTitle: "Home",
+        headerRight: () => (
+          <Button
+            text="New Status"
+            onPress={() => navigation.navigate("NewStatus")}
+          />
+        ),
+      })}
+    />
     <AppStack.Screen name="Thread" component={Thread} />
   </AppStack.Navigator>
 );
