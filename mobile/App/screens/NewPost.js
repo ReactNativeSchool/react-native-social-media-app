@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ScrollView } from "react-native";
 
-import { NewPostInput } from "../components/NewPostInput";
+import { NewPostInput } from "../components/Form";
 import { Header } from "../components/Header";
 
 export const NewPost = ({ navigation }) => {

@@ -16,8 +16,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Button = ({ onPress, text }) => (
-  <TouchableOpacity style={styles.button} onPress={onPress}>
-    <Text style={styles.buttonText}>{text}</Text>
-  </TouchableOpacity>
-);
+export const Button = ({ onPress, text, theme = "default" }) => {
+  const buttonStyles = [styles.button];
+  const textStyles = [styles.buttonText];
+
+  if (theme === "inverse") {
+    buttonStyles.push({ backgroundColor: "transparent" });
+    textStyles.push({ color: "#1ca1f2" });
+  }
+
+  return (
+    <TouchableOpacity style={buttonStyles} onPress={onPress}>
+      <Text style={textStyles}>{text}</Text>
+    </TouchableOpacity>
+  );
+};

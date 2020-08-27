@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Feed } from "./screens/Feed";
 import { Thread } from "./screens/Thread";
 import { NewPost } from "./screens/NewPost";
+import { Auth } from "./screens/Auth";
 
 import { Button } from "./components/Button";
 
@@ -17,11 +18,14 @@ const AppStackScreen = () => (
       options={({ navigation }) => ({
         headerTitle: "Home",
         headerRight: () => (
-          <Button
-            text="New Post"
-            onPress={() => navigation.navigate("NewPost")}
-          />
+          <Button text="New Post" onPress={() => navigation.navigate("Auth")} />
         ),
+        // headerRight: () => (
+        //   <Button
+        //     text="New Post"
+        //     onPress={() => navigation.navigate("NewPost")}
+        //   />
+        // ),
       })}
     />
     <AppStack.Screen name="Thread" component={Thread} />
@@ -33,6 +37,7 @@ const ModalStackScreen = () => (
   <ModalStack.Navigator mode="modal" headerMode="none">
     <ModalStack.Screen name="App" component={AppStackScreen} />
     <ModalStack.Screen name="NewPost" component={NewPost} />
+    <ModalStack.Screen name="Auth" component={Auth} />
   </ModalStack.Navigator>
 );
 

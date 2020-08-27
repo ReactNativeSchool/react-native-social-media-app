@@ -26,6 +26,8 @@ export const Header = ({ onLeftPress, leftText, onRightPress, rightText }) => (
     <TouchableOpacity onPress={onLeftPress}>
       <Text style={styles.linkText}>{leftText}</Text>
     </TouchableOpacity>
-    <Button onPress={onRightPress} text={rightText} />
+    {rightText && onRightPress ? (
+      <Button onPress={onRightPress} text={rightText} />
+    ) : null}
   </SafeAreaView>
 );
