@@ -18,8 +18,8 @@ const AppStackScreen = () => (
         headerTitle: "Home",
         headerRight: () => (
           <Button
-            text="New Status"
-            onPress={() => navigation.navigate("NewStatus")}
+            text="New Post"
+            onPress={() => navigation.navigate("NewPost")}
           />
         ),
       })}
