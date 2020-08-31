@@ -1,5 +1,6 @@
-import ApolloClient from "apollo-boost";
+import { ApolloClient, InMemoryCache, HttpLink, concat } from "@apollo/client";
 import AsyncStorage from "@react-native-community/async-storage";
+import { setContext } from "@apollo/client/link/context";
 
 const AUTH_KEY = "SocialApp::AUTH_TOKEN";
 
@@ -16,18 +17,25 @@ export const setAuthToken = (token) => AsyncStorage.setItem(AUTH_KEY, token);
 
 export const getAuthToken = () => AsyncStorage.getItem(AUTH_KEY);
 
-export const client = new ApolloClient({
-  uri: "http://localhost:4000",
-  request: async (operation) => {
-    try {
-      const token = await getAuthToken();
-      operation.setContext({
+const httpLink = new HttpLink({ uri: "http://localhost:4000" });
+
+const authMiddleware = setContext((request, context) => {
+  return getAuthToken()
+    .then((token) => {
+      return {
+        ...context,
         headers: {
-          Authorization: `Bearer ${token}`,
+          ...context.headers,
+          Authorization: token ? `Bearer ${token}` : "",
         },
-      });
-    } catch (error) {
-      console.log("error occurred while setting auth token", error);
-    }
-  },
+      };
+    })
+    .catch(() => {
+      return context;
+    });
+});
+
+export const client = new ApolloClient({
+  link: concat(authMiddleware, httpLink),
+  cache: new InMemoryCache(),
 });

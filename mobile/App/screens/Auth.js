@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ScrollView, Text, StyleSheet, View } from "react-native";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 
 import { Header } from "../components/Header";
 import { Button } from "../components/Button";

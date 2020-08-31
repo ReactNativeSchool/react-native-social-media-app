@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, View, ActivityIndicator } from "react-native";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 
 import { Post, Separator } from "../components/Post";
 import { requestFeed } from "../graphql/queries";
