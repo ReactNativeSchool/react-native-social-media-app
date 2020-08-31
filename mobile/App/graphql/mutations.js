@@ -10,3 +10,12 @@ export const login = gql`
     }
   }
 `;
+
+export const likePost = gql`
+  mutation LikePost($postId: String!) {
+    likePost(postId: $postId) {
+      _id
+      isLiked
+    }
+  }
+`;

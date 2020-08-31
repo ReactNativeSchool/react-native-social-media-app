@@ -20,11 +20,7 @@ export const Thread = ({ navigation, route }) => {
       style={{ backgroundColor: "#fff" }}
       data={thread}
       renderItem={({ item }) => (
-        <Post
-          {...item}
-          onHeartPress={() => alert("todo!")}
-          indent={item._id !== originalStatus._id}
-        />
+        <Post {...item} indent={item._id !== originalStatus._id} />
       )}
       ItemSeparatorComponent={() => <Separator />}
       keyExtractor={(item) => item._id}

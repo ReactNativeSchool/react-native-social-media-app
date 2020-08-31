@@ -18,7 +18,6 @@ export const Feed = ({ navigation }) => {
         <Post
           {...item}
           onRowPress={() => navigation.push("Thread", { status: item })}
-          onHeartPress={() => alert("todo!")}
         />
       )}
       ItemSeparatorComponent={() => <Separator />}

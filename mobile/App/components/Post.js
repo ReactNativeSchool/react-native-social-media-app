@@ -8,6 +8,9 @@ import {
   Dimensions,
 } from "react-native";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { useMutation } from "@apollo/client";
+
+import { likePost } from "../graphql/mutations";
 
 const Screen = Dimensions.get("window");
 
@@ -71,48 +74,56 @@ const styles = StyleSheet.create({
 });
 
 export const Post = ({
+  _id,
   user = {},
   text,
   isLiked = false,
   onRowPress,
-  onHeartPress,
   publishedAt,
   indent,
-}) => (
-  <TouchableOpacity onPress={onRowPress}>
-    <View style={[styles.row, indent && styles.rowIndented]}>
-      <View>
-        <Image source={{ uri: user.avatarUri }} style={styles.avatar} />
-      </View>
-      <View style={styles.right}>
-        <View style={styles.header}>
-          <Text style={styles.textName}>{user.name}</Text>
-          <Text style={styles.textUsername}>{user.username}</Text>
-        </View>
-        <Text style={styles.textPost}>{text}</Text>
+}) => {
+  const [likePostFn] = useMutation(likePost);
 
-        <View style={styles.actions}>
-          <TouchableOpacity onPress={onHeartPress}>
-            {isLiked ? (
-              <Image
-                style={[styles.heart, styles.heartFilled]}
-                source={require("../assets/icons/heart.png")}
-              />
-            ) : (
-              <Image
-                style={styles.heart}
-                source={require("../assets/icons/heart-border.png")}
-              />
-            )}
-          </TouchableOpacity>
-          <Text style={styles.textDate}>
-            {formatDistanceToNow(new Date(publishedAt), { addSuffix: true })}
-          </Text>
+  return (
+    <TouchableOpacity onPress={onRowPress}>
+      <View style={[styles.row, indent && styles.rowIndented]}>
+        <View>
+          <Image source={{ uri: user.avatarUri }} style={styles.avatar} />
+        </View>
+        <View style={styles.right}>
+          <View style={styles.header}>
+            <Text style={styles.textName}>{user.name}</Text>
+            <Text style={styles.textUsername}>{user.username}</Text>
+          </View>
+          <Text style={styles.textPost}>{text}</Text>
+
+          <View style={styles.actions}>
+            <TouchableOpacity
+              onPress={() => {
+                likePostFn({ variables: { postId: _id } });
+              }}
+            >
+              {isLiked ? (
+                <Image
+                  style={[styles.heart, styles.heartFilled]}
+                  source={require("../assets/icons/heart.png")}
+                />
+              ) : (
+                <Image
+                  style={styles.heart}
+                  source={require("../assets/icons/heart-border.png")}
+                />
+              )}
+            </TouchableOpacity>
+            <Text style={styles.textDate}>
+              {formatDistanceToNow(new Date(publishedAt), { addSuffix: true })}
+            </Text>
+          </View>
         </View>
       </View>
-    </View>
-  </TouchableOpacity>
-);
+    </TouchableOpacity>
+  );
+};
 
 export const Separator = () => (
   <View style={{ height: 1, flex: 1, backgroundColor: "#e6ecf0" }} />
