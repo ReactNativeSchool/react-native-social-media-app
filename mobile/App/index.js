@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { ApolloProvider } from "@apollo/react-hooks";
 
 import { Feed } from "./screens/Feed";
 import { Thread } from "./screens/Thread";
@@ -8,6 +9,7 @@ import { NewPost } from "./screens/NewPost";
 import { Auth } from "./screens/Auth";
 
 import { Button } from "./components/Button";
+import { client } from "./graphql/client";
 
 const AppStack = createStackNavigator();
 const AppStackScreen = () => (
@@ -42,7 +44,9 @@ const ModalStackScreen = () => (
 );
 
 export default () => (
-  <NavigationContainer>
-    <ModalStackScreen />
-  </NavigationContainer>
+  <ApolloProvider client={client}>
+    <NavigationContainer>
+      <ModalStackScreen />
+    </NavigationContainer>
+  </ApolloProvider>
 );
