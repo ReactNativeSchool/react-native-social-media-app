@@ -9,7 +9,7 @@ import { NewPost } from "./screens/NewPost";
 import { Auth } from "./screens/Auth";
 
 import { Button } from "./components/Button";
-import { client } from "./graphql/client";
+import { client, isAuthorized } from "./graphql/client";
 
 const AppStack = createStackNavigator();
 const AppStackScreen = () => (
@@ -20,14 +20,18 @@ const AppStackScreen = () => (
       options={({ navigation }) => ({
         headerTitle: "Home",
         headerRight: () => (
-          <Button text="New Post" onPress={() => navigation.navigate("Auth")} />
+          <Button
+            text="New Post"
+            onPress={async () => {
+              const signedIn = await isAuthorized();
+              if (signedIn) {
+                navigation.navigate("NewPost");
+              } else {
+                navigation.navigate("Auth");
+              }
+            }}
+          />
         ),
-        // headerRight: () => (
-        //   <Button
-        //     text="New Post"
-        //     onPress={() => navigation.navigate("NewPost")}
-        //   />
-        // ),
       })}
     />
     <AppStack.Screen name="Thread" component={Thread} />

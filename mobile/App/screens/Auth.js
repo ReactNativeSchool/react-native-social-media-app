@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { ScrollView, Text, StyleSheet, View } from "react-native";
+import { useMutation } from "@apollo/react-hooks";
 
 import { Header } from "../components/Header";
 import { Button } from "../components/Button";
 import { Input } from "../components/Form";
+import { login } from "../graphql/mutations";
+import { setAuthToken } from "../graphql/client";
 
 const styles = StyleSheet.create({
   headerText: {
@@ -23,6 +26,24 @@ const styles = StyleSheet.create({
 
 export const Auth = ({ navigation }) => {
   const [isRegistering, setIsRegistering] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loginFn] = useMutation(login);
+
+  const handleSubmit = () => {
+    if (isRegistering) {
+      alert("todo!");
+      return Promise.resolve();
+    }
+
+    return loginFn({
+      variables: { username, password },
+    }).then((res) => {
+      setAuthToken(res?.data?.login?.token);
+      navigation.pop();
+    });
+  };
 
   return (
     <>
@@ -35,13 +56,22 @@ export const Auth = ({ navigation }) => {
         <Text style={styles.headerText}>Sign in to Continue</Text>
 
         {isRegistering ? <Input placeholder="Name" /> : null}
-        <Input placeholder="Username" />
-        <Input placeholder="Password" />
+        <Input
+          placeholder="Username"
+          onChangeText={(text) => setUsername(text)}
+          autoCapitalize="none"
+        />
+        <Input
+          placeholder="Password"
+          onChangeText={(text) => setPassword(text)}
+          autoCapitalize="none"
+          secureTextEntry
+        />
 
         <View style={styles.buffer} />
         <Button
           text={isRegistering ? "Register" : "Sign In"}
-          onPress={() => alert("todo!")}
+          onPress={handleSubmit}
         />
         <View style={styles.buffer} />
         <Button
