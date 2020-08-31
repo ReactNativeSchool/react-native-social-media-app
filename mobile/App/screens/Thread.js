@@ -1,65 +1,24 @@
 import React from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, View, ActivityIndicator } from "react-native";
+import { useQuery } from "@apollo/react-hooks";
 
 import { Post, Separator } from "../components/Post";
 import { Button } from "../components/Button";
+import { requestResponses } from "../graphql/queries";
 
 export const Thread = ({ navigation, route }) => {
   const originalStatus = route?.params?.status;
 
+  const { loading, data } = useQuery(requestResponses, {
+    variables: { _id: originalStatus._id },
+  });
+
+  const thread = data?.responses || [];
+
   return (
     <FlatList
       style={{ backgroundColor: "#fff" }}
-      data={[
-        {
-          _id: "0",
-          userId: "user-1",
-          text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          publishedAt: "2020-08-26T16:07:04.796Z",
-          parentPostId: null,
-          user: {
-            avatarUri: "https://picsum.photos/id/238/200",
-            name: "John Doe",
-            username: "john_doe",
-          },
-        },
-        {
-          _id: "r-0",
-          userId: "user-2",
-          text: "Sed facilisis nibh sed semper pulvinar.",
-          publishedAt: "2020-08-26T16:07:04.796Z",
-          parentPostId: "0",
-          user: {
-            avatarUri: "https://picsum.photos/id/237/200",
-            name: "Jane Doe",
-            username: "jane_doe",
-          },
-        },
-        {
-          _id: "r-1",
-          userId: "user-2",
-          text: "Nulla pretium massa nec velit tincidunt facilisis.",
-          publishedAt: "2020-08-26T16:07:04.796Z",
-          parentPostId: "0",
-          user: {
-            avatarUri: "https://picsum.photos/id/237/200",
-            name: "Jane Doe",
-            username: "jane_doe",
-          },
-        },
-        {
-          _id: "r-2",
-          userId: "user-2",
-          text: "Mauris placerat nisi at tempus porttitor.",
-          publishedAt: "2020-08-26T16:07:04.796Z",
-          parentPostId: "0",
-          user: {
-            avatarUri: "https://picsum.photos/id/237/200",
-            name: "Jane Doe",
-            username: "jane_doe",
-          },
-        },
-      ]}
+      data={thread}
       renderItem={({ item }) => (
         <Post
           {...item}
@@ -85,6 +44,13 @@ export const Thread = ({ navigation, route }) => {
             }
           />
         </View>
+      }
+      ListEmptyComponent={
+        loading ? (
+          <View style={{ marginTop: 20 }}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : null
       }
     />
   );
