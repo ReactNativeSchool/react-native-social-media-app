@@ -5,7 +5,7 @@ import { useMutation } from "@apollo/client";
 import { Header } from "../components/Header";
 import { Button } from "../components/Button";
 import { Input } from "../components/Form";
-import { login } from "../graphql/mutations";
+import { login, register } from "../graphql/mutations";
 import { useAuth } from "../util/AuthManager";
 
 const styles = StyleSheet.create({
@@ -27,15 +27,27 @@ const styles = StyleSheet.create({
 export const Auth = ({ navigation }) => {
   const { setAuthToken } = useAuth();
   const [isRegistering, setIsRegistering] = useState(false);
+  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [loginFn] = useMutation(login);
+  const [registerFn] = useMutation(register);
 
   const handleSubmit = () => {
     if (isRegistering) {
-      alert("todo!");
-      return Promise.resolve();
+      return registerFn({
+        variables: { username, name, password },
+      })
+        .then(() => {
+          return loginFn({
+            variables: { username, password },
+          });
+        })
+        .then((res) => {
+          setAuthToken(res?.data?.login?.token);
+          navigation.pop();
+        });
     }
 
     return loginFn({
@@ -56,7 +68,9 @@ export const Auth = ({ navigation }) => {
       >
         <Text style={styles.headerText}>Sign in to Continue</Text>
 
-        {isRegistering ? <Input placeholder="Name" /> : null}
+        {isRegistering ? (
+          <Input placeholder="Name" onChangeText={(text) => setName(text)} />
+        ) : null}
         <Input
           placeholder="Username"
           onChangeText={(text) => setUsername(text)}

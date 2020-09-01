@@ -11,6 +11,14 @@ export const login = gql`
   }
 `;
 
+export const register = gql`
+  mutation register($username: String!, $name: String!, $password: String!) {
+    register(user: { username: $username, name: $name, password: $password }) {
+      _id
+    }
+  }
+`;
+
 export const likePost = gql`
   mutation LikePost($postId: String!) {
     likePost(postId: $postId) {
