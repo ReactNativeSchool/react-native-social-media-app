@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { useMutation } from "@apollo/client";
+import { useNavigation } from "@react-navigation/native";
 
 import { likePost } from "../graphql/mutations";
+import { useAuth } from "../util/AuthManager";
 
 const Screen = Dimensions.get("window");
 
@@ -82,7 +84,9 @@ export const Post = ({
   publishedAt,
   indent,
 }) => {
+  const { isAuthorized } = useAuth();
   const [likePostFn] = useMutation(likePost);
+  const navigation = useNavigation();
 
   return (
     <TouchableOpacity onPress={onRowPress}>
@@ -100,7 +104,11 @@ export const Post = ({
           <View style={styles.actions}>
             <TouchableOpacity
               onPress={() => {
-                likePostFn({ variables: { postId: _id } });
+                if (isAuthorized) {
+                  likePostFn({ variables: { postId: _id } });
+                } else {
+                  navigation.push("Auth");
+                }
               }}
             >
               {isLiked ? (

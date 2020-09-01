@@ -5,8 +5,11 @@ import { useQuery } from "@apollo/client";
 import { Post, Separator } from "../components/Post";
 import { Button } from "../components/Button";
 import { requestResponses } from "../graphql/queries";
+import { useAuth } from "../util/AuthManager";
 
 export const Thread = ({ navigation, route }) => {
+  const { isAuthorized } = useAuth();
+
   const originalStatus = route?.params?.status;
 
   const { loading, data } = useQuery(requestResponses, {
@@ -35,9 +38,13 @@ export const Thread = ({ navigation, route }) => {
         >
           <Button
             text="New Reply"
-            onPress={() =>
-              navigation.push("NewPost", { parent: originalStatus })
-            }
+            onPress={() => {
+              if (isAuthorized) {
+                navigation.push("NewPost", { parent: originalStatus });
+              } else {
+                navigation.push("Auth");
+              }
+            }}
           />
         </View>
       }
