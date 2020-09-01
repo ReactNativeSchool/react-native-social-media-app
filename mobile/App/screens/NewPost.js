@@ -1,11 +1,29 @@
 import React, { useState } from "react";
 import { ScrollView } from "react-native";
+import { useMutation } from "@apollo/client";
 
 import { NewPostInput } from "../components/Form";
 import { Header } from "../components/Header";
+import { createPost } from "../graphql/mutations";
+import { requestFeed, requestResponses } from "../graphql/queries";
 
-export const NewPost = ({ navigation }) => {
+export const NewPost = ({ navigation, route }) => {
+  const parentPostId = route?.params?.parent?._id;
   const [statusText, setStatusText] = useState("");
+
+  const refetchQueries = [];
+  if (parentPostId) {
+    refetchQueries.push({
+      query: requestResponses,
+      variables: { _id: parentPostId },
+    });
+  } else {
+    refetchQueries.push({
+      query: requestFeed,
+    });
+  }
+
+  const [createPostFn] = useMutation(createPost, { refetchQueries });
 
   return (
     <>
@@ -13,8 +31,11 @@ export const NewPost = ({ navigation }) => {
         onLeftPress={() => navigation.pop()}
         leftText="Cancel"
         onRightPress={() => {
-          alert(statusText);
-          navigation.pop();
+          createPostFn({ variables: { text: statusText, parentPostId } }).then(
+            () => {
+              navigation.pop();
+            }
+          );
         }}
         rightText="Post"
       />

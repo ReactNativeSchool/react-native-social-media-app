@@ -19,3 +19,12 @@ export const likePost = gql`
     }
   }
 `;
+
+export const createPost = gql`
+  mutation CreatePost($text: String!, $parentPostId: String) {
+    createPost(post: { text: $text, parentPostId: $parentPostId }) {
+      _id
+      text
+    }
+  }
+`;
