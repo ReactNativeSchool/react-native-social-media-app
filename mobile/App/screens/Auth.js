@@ -6,7 +6,7 @@ import { Header } from "../components/Header";
 import { Button } from "../components/Button";
 import { Input } from "../components/Form";
 import { login } from "../graphql/mutations";
-import { setAuthToken } from "../graphql/client";
+import { useAuth } from "../util/AuthManager";
 
 const styles = StyleSheet.create({
   headerText: {
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
 });
 
 export const Auth = ({ navigation }) => {
+  const { setAuthToken } = useAuth();
   const [isRegistering, setIsRegistering] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

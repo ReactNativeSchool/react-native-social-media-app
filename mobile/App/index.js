@@ -1,7 +1,9 @@
 import React from "react";
+import { View, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ApolloProvider } from "@apollo/client";
+import { AntDesign } from "@expo/vector-icons";
 
 import { Feed } from "./screens/Feed";
 import { Thread } from "./screens/Thread";
@@ -9,7 +11,47 @@ import { NewPost } from "./screens/NewPost";
 import { Auth } from "./screens/Auth";
 
 import { Button } from "./components/Button";
-import { client, isAuthorized } from "./graphql/client";
+import { client } from "./graphql/client";
+import { AuthContextProvider, useAuth } from "./util/AuthManager";
+
+const LogoutButton = () => {
+  const { isAuthorized, setAuthToken } = useAuth();
+
+  if (!isAuthorized) {
+    return null;
+  }
+
+  return (
+    <View
+      style={{
+        transform: [{ rotateZ: "180deg" }],
+      }}
+    >
+      <TouchableOpacity
+        style={{ paddingHorizontal: 15 }}
+        onPress={() => setAuthToken(null)}
+      >
+        <AntDesign name="logout" size={24} color="#6e7f8d" />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const NewPostButton = ({ navigation }) => {
+  const { isAuthorized } = useAuth();
+  return (
+    <Button
+      text="New Post"
+      onPress={async () => {
+        if (isAuthorized) {
+          navigation.navigate("NewPost");
+        } else {
+          navigation.navigate("Auth");
+        }
+      }}
+    />
+  );
+};
 
 const AppStack = createStackNavigator();
 const AppStackScreen = () => (
@@ -18,20 +60,9 @@ const AppStackScreen = () => (
       name="Feed"
       component={Feed}
       options={({ navigation }) => ({
+        headerLeft: () => <LogoutButton />,
         headerTitle: "Home",
-        headerRight: () => (
-          <Button
-            text="New Post"
-            onPress={async () => {
-              const signedIn = await isAuthorized();
-              if (signedIn) {
-                navigation.navigate("NewPost");
-              } else {
-                navigation.navigate("Auth");
-              }
-            }}
-          />
-        ),
+        headerRight: () => <NewPostButton navigation={navigation} />,
       })}
     />
     <AppStack.Screen name="Thread" component={Thread} />
@@ -48,9 +79,11 @@ const ModalStackScreen = () => (
 );
 
 export default () => (
-  <ApolloProvider client={client}>
-    <NavigationContainer>
-      <ModalStackScreen />
-    </NavigationContainer>
-  </ApolloProvider>
+  <AuthContextProvider>
+    <ApolloProvider client={client}>
+      <NavigationContainer>
+        <ModalStackScreen />
+      </NavigationContainer>
+    </ApolloProvider>
+  </AuthContextProvider>
 );
