@@ -22,6 +22,9 @@ const styles = StyleSheet.create({
   buffer: {
     height: 20,
   },
+  errorMessage: {
+    color: "tomato",
+  },
 });
 
 export const Auth = ({ navigation }) => {
@@ -30,6 +33,7 @@ export const Auth = ({ navigation }) => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setError] = useState("");
 
   const [loginFn] = useMutation(login);
   const [registerFn] = useMutation(register);
@@ -47,15 +51,22 @@ export const Auth = ({ navigation }) => {
         .then((res) => {
           setAuthToken(res?.data?.login?.token);
           navigation.pop();
+        })
+        .catch((error) => {
+          setError(error.message);
         });
     }
 
     return loginFn({
       variables: { username, password },
-    }).then((res) => {
-      setAuthToken(res?.data?.login?.token);
-      navigation.pop();
-    });
+    })
+      .then((res) => {
+        setAuthToken(res?.data?.login?.token);
+        navigation.pop();
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
   };
 
   return (
@@ -83,6 +94,7 @@ export const Auth = ({ navigation }) => {
           secureTextEntry
         />
 
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
         <View style={styles.buffer} />
         <Button
           text={isRegistering ? "Register" : "Sign In"}
