@@ -1,9 +1,9 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import AsyncStorage from "@react-native-community/async-storage";
+import * as SecureStore from "expo-secure-store";
 
-const AUTH_KEY = "SocialApp::AUTH_TOKEN";
+const AUTH_KEY = "AUTH_TOKEN";
 
-export const getAuthToken = () => AsyncStorage.getItem(AUTH_KEY);
+export const getAuthToken = () => SecureStore.getItemAsync(AUTH_KEY);
 
 const AuthContext = createContext();
 
@@ -26,12 +26,14 @@ export const AuthContextProvider = ({ children }) => {
 
   const setAuthToken = (token) => {
     if (token) {
-      setIsAuthorized(true);
-      return AsyncStorage.setItem(AUTH_KEY, token);
+      return SecureStore.setItemAsync(AUTH_KEY, token).then(() =>
+        setIsAuthorized(true)
+      );
     }
 
-    setIsAuthorized(false);
-    return AsyncStorage.removeItem(AUTH_KEY);
+    return SecureStore.deleteItemAsync(AUTH_KEY).then(() =>
+      setIsAuthorized(false)
+    );
   };
 
   return (
